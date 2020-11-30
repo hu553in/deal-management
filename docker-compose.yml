@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  server:
+    image: nginx:alpine
+    container_name: server
+    restart: unless-stopped
+    depends_on:
+      - api
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d:ro
+    networks:
+      - customer_supplier_deal_management_tier
+    ports:
+      - "9920:9920"
+  db:
+    image: postgres:12-alpine
+    container_name: db
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres_password
+    networks:
+      - customer_supplier_deal_management_tier
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/api.dockerfile
+    container_name: api
+    restart: unless-stopped
+    volumes:
+      - ./build/libs/customer-supplier-deal-management-1.0.0.jar:/opt/app.jar
+    command: sh -c "/opt/wait-for-it.sh -t 0 db:5432 && java -jar /opt/app.jar"
+    environment:
+      POSTGRESQL_JDBC_URL: jdbc:postgresql://db:5432/postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD: postgres_password
+    depends_on:
+      - db
+    networks:
+      - customer_supplier_deal_management_tier
+  ui:
+    build:
+      context: .
+      dockerfile: ./docker/ui.dockerfile
+    container_name: ui
+    restart: unless-stopped
+    depends_on:
+      - api
+    volumes:
+      - ./docker/http-reverse-proxy:/opt/http-reverse-proxy:ro
+      - ./gui:/opt/customer_supplier_deal_management
+    environment:
+      REACT_APP_API_URL: http://localhost:9920
+    working_dir: /opt/customer_supplier_deal_management
+    user: app
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c '
+        chown -R app:app . &&
+        yarn &&
+        yarn start
+      '
+    networks:
+      - customer_supplier_deal_management_tier
+
+networks:
+  customer_supplier_deal_management_tier:

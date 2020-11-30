@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  data-source:
+    customer-supplier-deal-management:
+      type: com.zaxxer.hikari.HikariDataSource
+      jdbc-url: ${POSTGRESQL_JDBC_URL}
+      username: ${POSTGRESQL_USERNAME}
+      password: ${POSTGRESQL_PASSWORD}
+      test-on-borrow: true
+      remove-abandoned: true
+      validation-query: 'select 1;'
+      driver-class-name: org.postgresql.Driver
