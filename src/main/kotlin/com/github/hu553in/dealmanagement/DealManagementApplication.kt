@@ -1,11 +1,11 @@
-package com.github.hu553in.customer_supplier_deal_management
+package com.github.hu553in.dealmanagement
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class CustomerSupplierDealManagementApplication
+class DealManagementApplication
 
 fun main(args: Array<String>) {
-	runApplication<CustomerSupplierDealManagementApplication>(*args)
+	runApplication<DealManagementApplication>(*args)
 }

@@ -1,4 +1,4 @@
-package com.github.hu553in.customer_supplier_deal_management.configurations
+package com.github.hu553in.dealmanagement.configurations
 
 import org.springframework.boot.autoconfigure.flyway.FlywayDataSource
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -13,7 +13,7 @@ import javax.sql.DataSource
 class JdbcOperationsConfiguration {
     @Bean
     @FlywayDataSource
-    @ConfigurationProperties(prefix = "spring.data-source.customer-supplier-deal-management")
+    @ConfigurationProperties(prefix = "spring.data-source.deal-management")
     fun dataSource(): DataSource {
         return DataSourceBuilder.create().build()
     }

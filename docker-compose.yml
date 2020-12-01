@@ -10,7 +10,7 @@ services:
     volumes:
       - ./docker/nginx:/etc/nginx/conf.d:ro
     networks:
-      - customer_supplier_deal_management_tier
+      - deal_management_tier
     ports:
       - "9920:9920"
   db:
@@ -20,7 +20,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres_password
     networks:
-      - customer_supplier_deal_management_tier
+      - deal_management_tier
   api:
     build:
       context: .
@@ -28,7 +28,7 @@ services:
     container_name: api
     restart: unless-stopped
     volumes:
-      - ./build/libs/customer-supplier-deal-management-1.0.0.jar:/opt/app.jar
+      - ./build/libs/deal-management-1.0.0.jar:/opt/app.jar
     command: sh -c "/opt/wait-for-it.sh -t 0 db:5432 && java -jar /opt/app.jar"
     environment:
       POSTGRESQL_JDBC_URL: jdbc:postgresql://db:5432/postgres
@@ -37,7 +37,7 @@ services:
     depends_on:
       - db
     networks:
-      - customer_supplier_deal_management_tier
+      - deal_management_tier
   ui:
     build:
       context: .
@@ -48,10 +48,10 @@ services:
       - api
     volumes:
       - ./docker/http-reverse-proxy:/opt/http-reverse-proxy:ro
-      - ./gui:/opt/customer_supplier_deal_management
+      - ./gui:/opt/deal_management
     environment:
       REACT_APP_API_URL: http://localhost:9920
-    working_dir: /opt/customer_supplier_deal_management
+    working_dir: /opt/deal_management
     user: app
     ports:
       - "3000:3000"
@@ -62,7 +62,7 @@ services:
         yarn start
       '
     networks:
-      - customer_supplier_deal_management_tier
+      - deal_management_tier
 
 networks:
-  customer_supplier_deal_management_tier:
+  deal_management_tier:

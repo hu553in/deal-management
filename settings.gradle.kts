@@ -1,1 +1,1 @@
-rootProject.name = "customer-supplier-deal-management"
+rootProject.name = "deal-management"

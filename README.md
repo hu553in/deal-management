@@ -17,8 +17,8 @@ The purpose of this project is to learn basics of the project management during 
 ### Docker
 
 1. Install `GNU Make`, `Docker`, `Docker Compose`, `OpenJDK` (≥ 11)
-2. Create a relative symlink to [the GUI](https://github.com/hu553in/customer-supplier-deal-management-gui)
-named `./gui` (e.g. `ln -rs ../customer-supplier-deal-management-gui ./gui`)
+2. Create a relative symlink to [the GUI](https://github.com/hu553in/deal-management-gui)
+named `./gui` (e.g. `ln -rs ../deal-management-gui ./gui`)
 3. Run `make` to run the app
 4. Run `make testBackend` in the another terminal window
 in case if you want to run backend unit tests

@@ -3,7 +3,7 @@ server:
 
 spring:
   data-source:
-    customer-supplier-deal-management:
+    deal-management:
       type: com.zaxxer.hikari.HikariDataSource
       jdbc-url: ${POSTGRESQL_JDBC_URL}
       username: ${POSTGRESQL_USERNAME}
