@@ -52,12 +52,12 @@ services:
     environment:
       REACT_APP_API_URL: http://localhost:9920
     working_dir: /opt/deal_management
-    user: app
+    user: deal-management
     ports:
       - "3000:3000"
     command: >
       sh -c '
-        chown -R app:app . &&
+        chown -R deal-management:deal-management . &&
         yarn &&
         yarn start
       '
