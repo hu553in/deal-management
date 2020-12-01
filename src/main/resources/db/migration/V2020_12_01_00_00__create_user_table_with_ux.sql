@@ -1,6 +1,6 @@
 -- Create "user" table with ux
 
-create type role_type as enum ('viewer', 'editor', 'supervisor');
+create type role_type as enum ('viewer', 'editor', 'supervisor', 'admin');
 
 create table if not exists "user" (
     id char(36) not null primary key,
