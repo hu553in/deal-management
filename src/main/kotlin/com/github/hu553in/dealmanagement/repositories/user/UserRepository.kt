@@ -1,13 +1,15 @@
 package com.github.hu553in.dealmanagement.repositories.user
 
-import com.github.hu553in.dealmanagement.entities.Role
+import com.github.hu553in.dealmanagement.entities.UserRole
 import com.github.hu553in.dealmanagement.entities.User
+import com.github.hu553in.dealmanagement.exceptions.RepositoryException
 import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
 class UserRepository(private val jdbcOperations: JdbcOperations) : IUserRepository {
+    @Throws(RepositoryException::class)
     override fun getById(id: String): User {
         val query = "select email, password, \"role\" from \"user\" where id = ?"
         return try {
@@ -16,14 +18,15 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
                         id,
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        Role.valueOf(resultSet.getString("role"))
+                        UserRole.valueOf(resultSet.getString("role"))
                 )
-            }.singleOrNull() ?: throw Exception()
-        } catch (e: Throwable) {
-            throw e
+            }.singleOrNull() ?: error("There are zero or multiple users with passed ID")
+        } catch (t: Throwable) {
+            throw RepositoryException("Unable to get user by ID because of: ${t.message}", t)
         }
     }
 
+    @Throws(RepositoryException::class)
     override fun getByEmail(email: String): User {
         val query = "select id, password, \"role\" from \"user\" where email = ?"
         return try {
@@ -32,14 +35,15 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
                         resultSet.getString("id"),
                         email,
                         resultSet.getString("password"),
-                        Role.valueOf(resultSet.getString("role"))
+                        UserRole.valueOf(resultSet.getString("role"))
                 )
-            }.singleOrNull() ?: throw Exception()
-        } catch (e: Throwable) {
-            throw e
+            }.singleOrNull() ?: error("There are zero or multiple users with passed email")
+        } catch (t: Throwable) {
+            throw RepositoryException("Unable to get user by email because of: ${t.message}", t)
         }
     }
 
+    @Throws(RepositoryException::class)
     override fun getAll(): List<User> {
         val query = "select id, email, password, \"role\" from \"user\""
         return try {
@@ -48,26 +52,28 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
                         resultSet.getString("id"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        Role.valueOf(resultSet.getString("role"))
+                        UserRole.valueOf(resultSet.getString("role"))
                 )
             }
-        } catch (e: Throwable) {
-            throw e
+        } catch (t: Throwable) {
+            throw RepositoryException("Unable to get all users because of: ${t.message}", t)
         }
     }
 
-    override fun add(email: String, password: String, role: Role): String {
+    @Throws(RepositoryException::class)
+    override fun add(email: String, password: String, role: UserRole): String {
         val id = UUID.randomUUID().toString()
         val query = "insert into \"user\" values ($id, ?, ?, ?)"
         try {
             jdbcOperations.update(query, email, password, role)
-        } catch (e: Throwable) {
-            throw e
+        } catch (t: Throwable) {
+            throw RepositoryException("Unable to add user because of: ${t.message}", t)
         }
         return id
     }
 
-    override fun update(id: String, email: String?, password: String?, role: Role?) {
+    @Throws(RepositoryException::class)
+    override fun update(id: String, email: String?, password: String?, role: UserRole?) {
         val params = mutableListOf<Pair<String, String>>()
         email?.let { params.add(email to "email = ?") }
         password?.let { params.add(password to "password = ?") }
@@ -76,11 +82,9 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
             val query = "update \"user\" set ${params.joinToString(", ") { it.second }} where id = ?"
             try {
                 jdbcOperations.update(query, *params.map { it.first }.toTypedArray(), id)
-            } catch (e: Throwable) {
-                throw e
+            } catch (t: Throwable) {
+                throw RepositoryException("Unable to update user because of: ${t.message}", t)
             }
-        } else {
-            throw Exception()
         }
     }
 }

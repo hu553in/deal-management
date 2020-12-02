@@ -14,12 +14,8 @@ class JdbcOperationsConfiguration {
     @Bean
     @FlywayDataSource
     @ConfigurationProperties(prefix = "spring.data-source.deal-management")
-    fun dataSource(): DataSource {
-        return DataSourceBuilder.create().build()
-    }
+    fun dataSource(): DataSource = DataSourceBuilder.create().build()
 
     @Bean
-    fun jdbcOperations(dataSource: DataSource): JdbcOperations {
-        return JdbcTemplate(dataSource)
-    }
+    fun jdbcOperations(dataSource: DataSource): JdbcOperations = JdbcTemplate(dataSource)
 }

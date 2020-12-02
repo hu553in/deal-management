@@ -1,9 +1,9 @@
-package com.github.hu553in.dealmanagement.services.jwt
+package com.github.hu553in.dealmanagement.entities
 
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 
-internal class AuthenticatedJwtToken(
+internal class AuthenticatedJwt(
         private val subject: String,
         details: String,
         authorities: Collection<GrantedAuthority>

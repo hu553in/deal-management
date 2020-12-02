@@ -9,10 +9,10 @@ data class User(
         val id: String,
         val email: String,
         @JsonIgnore val password: String?,
-        val role: Role
+        val role: UserRole
 ) {
     @JsonCreator
-    constructor(id: String, email: String, role: Role) : this(id, email, null, role)
+    constructor(id: String, email: String, role: UserRole) : this(id, email, null, role)
 
     constructor(auth: Authentication) : this(
             if (auth.principal.javaClass == UserDetails::class.java)
@@ -21,6 +21,6 @@ data class User(
                 auth.principal as String,
             auth.details as String,
             null,
-            Role.valueOf(auth.authorities.singleOrNull()?.authority ?: throw Exception())
+            UserRole.valueOf(auth.authorities.singleOrNull()?.authority ?: error("User has zero or multiple roles"))
     )
 }

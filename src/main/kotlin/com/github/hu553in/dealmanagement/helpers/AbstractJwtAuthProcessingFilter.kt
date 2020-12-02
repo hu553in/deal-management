@@ -1,10 +1,10 @@
-package com.github.hu553in.dealmanagement.services.jwt
+package com.github.hu553in.dealmanagement.helpers
 
-import com.github.hu553in.dealmanagement.entities.Role
+import com.github.hu553in.dealmanagement.entities.Jwt
+import com.github.hu553in.dealmanagement.entities.UserRole
 import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
 import org.springframework.security.web.util.matcher.RequestMatcher
@@ -24,15 +24,15 @@ internal constructor(requestMatcher: RequestMatcher) : AbstractAuthenticationPro
             request: HttpServletRequest,
             response: HttpServletResponse
     ) = try {
-        JwtToken(processToken(request))
-    } catch (e: Exception) {
+        Jwt(processToken(request))
+    } catch (t: Throwable) {
         anonymousToken()
     }
 
     private fun anonymousToken() = AnonymousAuthenticationToken(
-            Role.ANONYMOUS.name,
-            Role.ANONYMOUS.name,
-            listOf(SimpleGrantedAuthority(Role.ANONYMOUS.name))
+            UserRole.ANONYMOUS.name,
+            UserRole.ANONYMOUS.name,
+            listOf(UserRole.ANONYMOUS)
     )
 
     @Throws(IOException::class, ServletException::class)
@@ -40,9 +40,9 @@ internal constructor(requestMatcher: RequestMatcher) : AbstractAuthenticationPro
             request: HttpServletRequest,
             response: HttpServletResponse,
             chain: FilterChain,
-            authResult: Authentication
+            authentication: Authentication
     ) {
-        SecurityContextHolder.getContext().authentication = authResult
+        SecurityContextHolder.getContext().authentication = authentication
         chain.doFilter(request, response)
     }
 }
