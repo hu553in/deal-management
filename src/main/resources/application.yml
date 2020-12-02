@@ -12,3 +12,8 @@ spring:
       remove-abandoned: true
       validation-query: 'select 1;'
       driver-class-name: org.postgresql.Driver
+
+jwt:
+  issuer: r.m.khasanshin@gmail.com
+  secret: $s9sEQGqbr6]E@Es-$(!_DTckha?Dx7&-qPA
+  ttl: 60
