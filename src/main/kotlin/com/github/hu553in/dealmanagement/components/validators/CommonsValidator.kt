@@ -6,7 +6,7 @@ import java.util.UUID
 @Component
 class CommonsValidator {
     companion object {
-        private val EMAIL_REGEX = Regex("^.+@.+$", RegexOption.IGNORE_CASE)
+        private val EMAIL_REGEX = Regex("^\\S+@\\S+\\.\\S+$")
     }
 
     fun isNotNullOrEmpty(
@@ -20,12 +20,12 @@ class CommonsValidator {
         }
     }
 
-    fun shorterThan(
+    fun hasLengthLessThan(
             value: String?,
             bound: Int,
             errors: MutableMap<String, String>,
             field: String,
-            key: String = "Should be shorter than $bound"
+            key: String = "Should have length less than $bound"
     ) {
         if (value != null && !errors.containsKey(field)) {
             if (value.length >= bound) {
@@ -34,12 +34,12 @@ class CommonsValidator {
         }
     }
 
-    fun shorterThanOrIsTheSameLengthAs(
+    fun hasLengthLessThanOrEqualTo(
             value: String?,
             bound: Long,
             errors: MutableMap<String, String>,
             field: String,
-            key: String = "Should be shorter than or be the same length as $bound"
+            key: String = "Should have length less than or equal to $bound"
     ) {
         if (value != null && !errors.containsKey(field)) {
             if (value.length > bound) {
@@ -48,12 +48,12 @@ class CommonsValidator {
         }
     }
 
-    fun longerThan(
+    fun hasLengthGreaterThan(
             value: String?,
             bound: Long,
             errors: MutableMap<String, String>,
             field: String,
-            key: String = "Should be longer than $bound"
+            key: String = "Should have length greater than $bound"
     ) {
         if (value != null && !errors.containsKey(field)) {
             if (value.length <= bound) {
@@ -62,12 +62,12 @@ class CommonsValidator {
         }
     }
 
-    fun longerThanOrIsTheSameLengthAs(
+    fun hasLengthGreaterThanOrEqualTo(
             value: String?,
             bound: Long,
             errors: MutableMap<String, String>,
             field: String,
-            key: String = "Should be longer than or be the same length as $bound"
+            key: String = "Should have length greater than or equal to $bound"
     ) {
         if (value != null && !errors.containsKey(field)) {
             if (value.length < bound) {
