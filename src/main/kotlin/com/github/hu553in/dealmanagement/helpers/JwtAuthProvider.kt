@@ -14,7 +14,7 @@ class JwtAuthProvider(private val jwtService: IJwtService) : AuthenticationProvi
         return try {
             jwtService.parseToken(token)
         } catch (t: Throwable) {
-            throw JwtAuthException("Invalid token: $token", t)
+            throw JwtAuthException("Unable to parse token: $token")
         }
     }
 

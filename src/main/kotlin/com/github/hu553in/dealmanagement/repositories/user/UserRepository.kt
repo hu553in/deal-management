@@ -1,7 +1,7 @@
 package com.github.hu553in.dealmanagement.repositories.user
 
-import com.github.hu553in.dealmanagement.entities.UserRole
 import com.github.hu553in.dealmanagement.entities.User
+import com.github.hu553in.dealmanagement.entities.UserRole
 import com.github.hu553in.dealmanagement.exceptions.RepositoryException
 import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.stereotype.Repository
@@ -15,10 +15,10 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
         return try {
             jdbcOperations.query(query, arrayOf(id)) { resultSet, _ ->
                 User(
-                        id,
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        UserRole.valueOf(resultSet.getString("role"))
+                    id,
+                    resultSet.getString("email"),
+                    resultSet.getString("password"),
+                    UserRole.valueOf(resultSet.getString("role"))
                 )
             }.singleOrNull() ?: error("There are zero or multiple users with passed ID")
         } catch (t: Throwable) {
@@ -32,10 +32,10 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
         return try {
             jdbcOperations.query(query, arrayOf(email)) { resultSet, _ ->
                 User(
-                        resultSet.getString("id"),
-                        email,
-                        resultSet.getString("password"),
-                        UserRole.valueOf(resultSet.getString("role"))
+                    resultSet.getString("id"),
+                    email,
+                    resultSet.getString("password"),
+                    UserRole.valueOf(resultSet.getString("role"))
                 )
             }.singleOrNull() ?: error("There are zero or multiple users with passed email")
         } catch (t: Throwable) {
@@ -49,10 +49,10 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
         return try {
             jdbcOperations.query(query) { resultSet, _ ->
                 User(
-                        resultSet.getString("id"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        UserRole.valueOf(resultSet.getString("role"))
+                    resultSet.getString("id"),
+                    resultSet.getString("email"),
+                    resultSet.getString("password"),
+                    UserRole.valueOf(resultSet.getString("role"))
                 )
             }
         } catch (t: Throwable) {
@@ -63,9 +63,9 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
     @Throws(RepositoryException::class)
     override fun add(email: String, password: String, role: UserRole): String {
         val id = UUID.randomUUID().toString()
-        val query = "insert into \"user\" values ($id, ?, ?, ?)"
+        val query = "insert into \"user\" values (?, ?, ?, ?::role_type)"
         try {
-            jdbcOperations.update(query, email, password, role)
+            jdbcOperations.update(query, id, email, password, role.name)
         } catch (t: Throwable) {
             throw RepositoryException("Unable to add user because of: ${t.message}", t)
         }
@@ -77,11 +77,14 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
         val params = mutableListOf<Pair<String, String>>()
         email?.let { params.add(email to "email = ?") }
         password?.let { params.add(password to "password = ?") }
-        role?.let { params.add(role.name to "role = ?") }
+        role?.let { params.add(role.name to "role = ?::role_type") }
         if (params.isNotEmpty()) {
             val query = "update \"user\" set ${params.joinToString(", ") { it.second }} where id = ?"
             try {
-                jdbcOperations.update(query, *params.map { it.first }.toTypedArray(), id)
+                val updatedRowsCount = jdbcOperations.update(query, *params.map { it.first }.toTypedArray(), id)
+                if (updatedRowsCount != 1) {
+                    error("There are zero or multiple users with passed ID")
+                }
             } catch (t: Throwable) {
                 throw RepositoryException("Unable to update user because of: ${t.message}", t)
             }

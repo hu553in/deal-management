@@ -16,17 +16,21 @@ class WhoamiController(private val whoamiService: IWhoamiService, private val ob
     @GetMapping
     fun whoami(): ResponseEntity<CommonResponse> = try {
         ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CommonResponse(
-                        HttpStatus.OK.value(),
-                        objectMapper.valueToTree(whoamiService.whoami())
-                ))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.OK.value(),
+                    objectMapper.valueToTree(whoamiService.whoami())
+                )
+            )
     } catch (t: Throwable) {
         ResponseEntity.unprocessableEntity()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CommonResponse(
-                        HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                        errors = listOf("Unable to get auth data because of: ${t.message}")
-                ))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                    errors = listOf("Unable to get auth data because of: ${t.message}")
+                )
+            )
     }
 }

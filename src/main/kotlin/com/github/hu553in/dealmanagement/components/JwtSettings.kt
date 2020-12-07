@@ -7,9 +7,9 @@ import java.time.Duration
 
 @Component
 class JwtSettings(
-        @Value("\${jwt.issuer}") val issuer: String,
-        @Value("\${jwt.secret}") secret: String,
-        @Value("\${jwt.ttl}") ttl: Int
+    @Value("\${jwt.issuer}") val issuer: String,
+    @Value("\${jwt.secret}") secret: String,
+    @Value("\${jwt.ttl}") ttl: Int
 ) {
     val secret = secret.toByteArray(StandardCharsets.UTF_8)
     val ttl = Duration.ofMinutes(ttl.toLong())

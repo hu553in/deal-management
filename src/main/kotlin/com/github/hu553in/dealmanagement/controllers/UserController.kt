@@ -18,52 +18,60 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/user")
 class UserController(
-        private val userService: IUserService,
-        private val objectMapper: ObjectMapper,
-        private val updateUserRequestValidator: UpdateUserRequestValidator,
-        private val controllerUtils: ControllerUtils
+    private val userService: IUserService,
+    private val objectMapper: ObjectMapper,
+    private val updateUserRequestValidator: UpdateUserRequestValidator,
+    private val controllerUtils: ControllerUtils
 ) {
     @GetMapping
     fun getAll(): ResponseEntity<CommonResponse> = try {
         ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CommonResponse(
-                        HttpStatus.OK.value(),
-                        objectMapper.valueToTree(userService.getAll())
-                ))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.OK.value(),
+                    objectMapper.valueToTree(userService.getAll())
+                )
+            )
     } catch (t: Throwable) {
         ResponseEntity.unprocessableEntity()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CommonResponse(
-                        HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                        errors = listOf("Unable to get all users because of: ${t.message}")
-                ))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                    errors = listOf("Unable to get all users because of: ${t.message}")
+                )
+            )
     }
 
     @GetMapping("/{id}")
     fun getById(@PathVariable("id") id: String): ResponseEntity<CommonResponse> = try {
         ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CommonResponse(
-                        HttpStatus.OK.value(),
-                        objectMapper.valueToTree(userService.getById(id))
-                ))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.OK.value(),
+                    objectMapper.valueToTree(userService.getById(id))
+                )
+            )
     } catch (t: Throwable) {
         ResponseEntity.unprocessableEntity()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CommonResponse(
-                        HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                        errors = listOf("Unable to get user by ID because of: ${t.message}")
-                ))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                    errors = listOf("Unable to get user by ID because of: ${t.message}")
+                )
+            )
     }
 
     @PatchMapping(
-            value = ["/{id}"],
-            consumes = [MediaType.APPLICATION_JSON_VALUE]
+        value = ["/{id}"],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun update(
-            @PathVariable("id") id: String,
-            @RequestBody updateUserRequest: UpdateUserRequest
+        @PathVariable("id") id: String,
+        @RequestBody updateUserRequest: UpdateUserRequest
     ): ResponseEntity<CommonResponse> = try {
         val errors = updateUserRequestValidator.validate(updateUserRequest)
         if (errors.isNotEmpty()) {
@@ -74,10 +82,12 @@ class UserController(
         }
     } catch (t: Throwable) {
         ResponseEntity.unprocessableEntity()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CommonResponse(
-                        HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                        errors = listOf("Unable to get user by ID because of: ${t.message}")
-                ))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                    errors = listOf("Unable to update user because of: ${t.message}")
+                )
+            )
     }
 }

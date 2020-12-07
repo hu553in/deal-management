@@ -1,7 +1,5 @@
 package com.github.hu553in.dealmanagement.exceptions
 
-class JwtAuthException : Exception {
-    constructor(message: String, cause: Throwable) : super(message, cause)
+import org.springframework.security.core.AuthenticationException
 
-    constructor(message: String) : super(message)
-}
+class JwtAuthException(message: String) : AuthenticationException(message)

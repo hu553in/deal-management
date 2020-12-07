@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class SignInService(
-        private val userRepository: IUserRepository,
-        private val passwordEncoder: PasswordEncoder
+    private val userRepository: IUserRepository,
+    private val passwordEncoder: PasswordEncoder
 ) : ISignInService {
     @Throws(ServiceException::class)
     override fun signIn(signInRequest: SignInRequest): User = try {

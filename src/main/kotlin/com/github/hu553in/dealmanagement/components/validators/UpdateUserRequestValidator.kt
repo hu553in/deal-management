@@ -5,14 +5,18 @@ import org.springframework.stereotype.Component
 
 @Component
 class UpdateUserRequestValidator(
-        private val commonsValidator: CommonsValidator,
-        private val roleValidator: RoleValidator
+    private val commonsValidator: CommonsValidator,
+    private val roleValidator: RoleValidator
 ) : Validator<UpdateUserRequest>() {
     override fun validation(errors: MutableMap<String, String>, value: UpdateUserRequest) {
-        commonsValidator.isEmail(value.email, errors, "email")
-        commonsValidator.hasLengthLessThanOrEqualTo(value.email, 255, errors, "email")
-        commonsValidator.hasLengthGreaterThanOrEqualTo(value.email, 8, errors, "password")
-        commonsValidator.hasLengthLessThanOrEqualTo(value.email, 255, errors, "password")
-        roleValidator.isRole(value.role, errors, "role")
+        value.email?.let {
+            commonsValidator.isEmail(it, errors, "email")
+            commonsValidator.hasLengthLessThanOrEqualTo(it, 255, errors, "email")
+        }
+        value.password?.let {
+            commonsValidator.hasLengthGreaterThanOrEqualTo(it, 8, errors, "password")
+            commonsValidator.hasLengthLessThanOrEqualTo(it, 255, errors, "password")
+        }
+        value.role?.let { roleValidator.isRole(it, errors, "role") }
     }
 }

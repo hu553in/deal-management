@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component
 @Component
 class ControllerUtils {
     fun respondWithValidationErrors(errors: Map<String, String>): ResponseEntity<CommonResponse> =
-            ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(CommonResponse(
-                            HttpStatus.BAD_REQUEST.value(),
-                            errors = errors.entries.map { "${it.key} - ${it.value}" }
-                    ))
+        ResponseEntity.badRequest()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(CommonResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                errors = errors.entries.map { "${it.key} - ${it.value}" }
+            ))
 }

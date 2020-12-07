@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class DealManagementApplication
 
 fun main(args: Array<String>) {
-	runApplication<DealManagementApplication>(*args)
+    runApplication<DealManagementApplication>(*args)
 }

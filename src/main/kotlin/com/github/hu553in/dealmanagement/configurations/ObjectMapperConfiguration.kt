@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration
 class ObjectMapperConfiguration {
     @Bean
     fun objectMapper() = ObjectMapper()
-            .registerKotlinModule()
-            .apply {
-                configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            }
+        .registerKotlinModule()
+        .apply {
+            configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        }
 }

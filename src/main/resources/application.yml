@@ -15,5 +15,5 @@ spring:
 
 jwt:
   issuer: r.m.khasanshin@gmail.com
-  secret: $s9sEQGqbr6]E@Es-$(!_DTckha?Dx7&-qPA
+  secret: bkkpPJYp4ZFCHxkzaEajTfU7RF5PUZNKuQNh2JQ4wbq2U6pMvYvFug6f5QjcLhKd
   ttl: 60

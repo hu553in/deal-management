@@ -1,5 +1,6 @@
 package com.github.hu553in.dealmanagement.controllers
 
+import com.github.hu553in.dealmanagement.components.validators.SignUpRequestValidator
 import com.github.hu553in.dealmanagement.models.CommonResponse
 import com.github.hu553in.dealmanagement.models.SignUpRequest
 import com.github.hu553in.dealmanagement.services.signup.ISignUpService
@@ -13,17 +14,28 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/sign-up")
-class SignUpController(private val signUpService: ISignUpService) {
+class SignUpController(
+    private val signUpService: ISignUpService,
+    private val signUpRequestValidator: SignUpRequestValidator,
+    private val controllerUtils: ControllerUtils
+) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun signUp(@RequestBody signUpRequest: SignUpRequest): ResponseEntity<CommonResponse> = try {
-        signUpService.signUp(signUpRequest)
-        ResponseEntity.noContent().build()
+        val errors = signUpRequestValidator.validate(signUpRequest)
+        if (errors.isNotEmpty()) {
+            controllerUtils.respondWithValidationErrors(errors)
+        } else {
+            signUpService.signUp(signUpRequest)
+            ResponseEntity.noContent().build()
+        }
     } catch (t: Throwable) {
         ResponseEntity.unprocessableEntity()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CommonResponse(
-                        HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                        errors = listOf("Unable to sign in because of: ${t.message}")
-                ))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                    errors = listOf("Unable to sign up because of: ${t.message}")
+                )
+            )
     }
 }

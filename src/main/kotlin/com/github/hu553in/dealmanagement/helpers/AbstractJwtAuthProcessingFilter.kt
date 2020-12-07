@@ -21,8 +21,8 @@ internal constructor(requestMatcher: RequestMatcher) : AbstractAuthenticationPro
 
     @Throws(AuthenticationException::class)
     override fun attemptAuthentication(
-            request: HttpServletRequest,
-            response: HttpServletResponse
+        request: HttpServletRequest,
+        response: HttpServletResponse
     ) = try {
         Jwt(processToken(request))
     } catch (t: Throwable) {
@@ -30,17 +30,17 @@ internal constructor(requestMatcher: RequestMatcher) : AbstractAuthenticationPro
     }
 
     private fun anonymousToken() = AnonymousAuthenticationToken(
-            UserRole.ANONYMOUS.name,
-            UserRole.ANONYMOUS.name,
-            listOf(UserRole.ANONYMOUS)
+        UserRole.ANONYMOUS.name,
+        UserRole.ANONYMOUS.name,
+        listOf(UserRole.ANONYMOUS)
     )
 
     @Throws(IOException::class, ServletException::class)
     override fun successfulAuthentication(
-            request: HttpServletRequest,
-            response: HttpServletResponse,
-            chain: FilterChain,
-            authentication: Authentication
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        chain: FilterChain,
+        authentication: Authentication
     ) {
         SecurityContextHolder.getContext().authentication = authentication
         chain.doFilter(request, response)

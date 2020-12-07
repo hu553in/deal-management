@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component
 @Component
 class RoleValidator {
     fun isRole(
-            value: String?,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should be valid role"
+        value: String?,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should be valid role"
     ) {
         if (!errors.containsKey(field)) {
             if (value == null) {

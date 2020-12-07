@@ -10,10 +10,10 @@ class CommonsValidator {
     }
 
     fun isNotNullOrEmpty(
-            value: String?,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should not be null or empty"
+        value: String?,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should not be null or empty"
     ) {
         if (!errors.containsKey(field) && (value == null || value.trim().isEmpty())) {
             errors[field] = key
@@ -21,11 +21,11 @@ class CommonsValidator {
     }
 
     fun hasLengthLessThan(
-            value: String?,
-            bound: Int,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should have length less than $bound"
+        value: String?,
+        bound: Int,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should have length less than $bound"
     ) {
         if (value != null && !errors.containsKey(field)) {
             if (value.length >= bound) {
@@ -35,11 +35,11 @@ class CommonsValidator {
     }
 
     fun hasLengthLessThanOrEqualTo(
-            value: String?,
-            bound: Long,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should have length less than or equal to $bound"
+        value: String?,
+        bound: Long,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should have length less than or equal to $bound"
     ) {
         if (value != null && !errors.containsKey(field)) {
             if (value.length > bound) {
@@ -49,11 +49,11 @@ class CommonsValidator {
     }
 
     fun hasLengthGreaterThan(
-            value: String?,
-            bound: Long,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should have length greater than $bound"
+        value: String?,
+        bound: Long,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should have length greater than $bound"
     ) {
         if (value != null && !errors.containsKey(field)) {
             if (value.length <= bound) {
@@ -63,11 +63,11 @@ class CommonsValidator {
     }
 
     fun hasLengthGreaterThanOrEqualTo(
-            value: String?,
-            bound: Long,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should have length greater than or equal to $bound"
+        value: String?,
+        bound: Long,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should have length greater than or equal to $bound"
     ) {
         if (value != null && !errors.containsKey(field)) {
             if (value.length < bound) {
@@ -77,10 +77,10 @@ class CommonsValidator {
     }
 
     fun isEmail(
-            value: String?,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should be valid email"
+        value: String?,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should be valid email"
     ) {
         if (!errors.containsKey(field) && (value == null || !EMAIL_REGEX.matches(value))) {
             errors[field] = key
@@ -88,10 +88,10 @@ class CommonsValidator {
     }
 
     fun isNotNull(
-            value: Any?,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should be not null"
+        value: Any?,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should be not null"
     ) {
         if (!errors.containsKey(field) && value == null) {
             errors[field] = key
@@ -99,10 +99,10 @@ class CommonsValidator {
     }
 
     fun isUuid(
-            value: String?,
-            errors: MutableMap<String, String>,
-            field: String,
-            key: String = "Should be valid UUID"
+        value: String?,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should be valid UUID"
     ) {
         if (!errors.containsKey(field)) {
             try {

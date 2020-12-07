@@ -1,7 +1,7 @@
 package com.github.hu553in.dealmanagement.repositories.user
 
-import com.github.hu553in.dealmanagement.entities.UserRole
 import com.github.hu553in.dealmanagement.entities.User
+import com.github.hu553in.dealmanagement.entities.UserRole
 import com.github.hu553in.dealmanagement.exceptions.RepositoryException
 
 interface IUserRepository {

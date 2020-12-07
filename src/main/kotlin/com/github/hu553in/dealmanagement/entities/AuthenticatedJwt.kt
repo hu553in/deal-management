@@ -4,9 +4,9 @@ import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 
 internal class AuthenticatedJwt(
-        private val subject: String,
-        details: String,
-        authorities: Collection<GrantedAuthority>
+    private val subject: String,
+    details: String,
+    authorities: Collection<GrantedAuthority>
 ) : AbstractAuthenticationToken(authorities) {
     init {
         setDetails(details)
