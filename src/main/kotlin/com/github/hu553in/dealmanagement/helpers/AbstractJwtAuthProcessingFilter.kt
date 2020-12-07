@@ -30,9 +30,9 @@ internal constructor(requestMatcher: RequestMatcher) : AbstractAuthenticationPro
     }
 
     private fun anonymousToken() = AnonymousAuthenticationToken(
-        UserRole.ANONYMOUS.name,
-        UserRole.ANONYMOUS.name,
-        listOf(UserRole.ANONYMOUS)
+        UserRole.ROLE_ANONYMOUS.name,
+        UserRole.ROLE_ANONYMOUS.name,
+        listOf(UserRole.ROLE_ANONYMOUS)
     )
 
     @Throws(IOException::class, ServletException::class)

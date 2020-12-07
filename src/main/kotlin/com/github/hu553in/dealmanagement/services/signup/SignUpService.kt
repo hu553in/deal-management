@@ -1,6 +1,5 @@
 package com.github.hu553in.dealmanagement.services.signup
 
-import com.github.hu553in.dealmanagement.entities.UserRole
 import com.github.hu553in.dealmanagement.exceptions.ServiceException
 import com.github.hu553in.dealmanagement.models.SignUpRequest
 import com.github.hu553in.dealmanagement.repositories.user.IUserRepository
@@ -18,7 +17,7 @@ class SignUpService(
         val password = signUpRequest.password
         try {
             val encodedPassword = passwordEncoder.encode(password)
-            userRepository.add(email, encodedPassword, UserRole.VIEWER)
+            userRepository.add(email, encodedPassword)
         } catch (t: Throwable) {
             throw ServiceException("Unable to sign up because of: ${t.message}", t)
         }

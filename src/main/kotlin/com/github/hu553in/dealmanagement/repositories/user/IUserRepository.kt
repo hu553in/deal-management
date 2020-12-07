@@ -18,5 +18,8 @@ interface IUserRepository {
     fun add(email: String, password: String, role: UserRole): String
 
     @Throws(RepositoryException::class)
+    fun add(email: String, password: String): String
+
+    @Throws(RepositoryException::class)
     fun update(id: String, email: String?, password: String?, role: UserRole?)
 }

@@ -73,6 +73,18 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
     }
 
     @Throws(RepositoryException::class)
+    override fun add(email: String, password: String): String {
+        val id = UUID.randomUUID().toString()
+        val query = "insert into \"user\" values (?, ?, ?)"
+        try {
+            jdbcOperations.update(query, id, email, password)
+        } catch (t: Throwable) {
+            throw RepositoryException("Unable to add user because of: ${t.message}", t)
+        }
+        return id
+    }
+
+    @Throws(RepositoryException::class)
     override fun update(id: String, email: String?, password: String?, role: UserRole?) {
         val params = mutableListOf<Pair<String, String>>()
         email?.let { params.add(email to "email = ?") }

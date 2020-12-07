@@ -8,6 +8,7 @@ import com.github.hu553in.dealmanagement.services.user.IUserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,6 +25,7 @@ class UserController(
     private val controllerUtils: ControllerUtils
 ) {
     @GetMapping
+    @PreAuthorize("hasRole(T(com.github.hu553in.dealmanagement.entities.UserRole).ROLE_ADMIN)")
     fun getAll(): ResponseEntity<CommonResponse> = try {
         ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_JSON)
@@ -45,6 +47,7 @@ class UserController(
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.github.hu553in.dealmanagement.entities.UserRole).ROLE_ADMIN)")
     fun getById(@PathVariable("id") id: String): ResponseEntity<CommonResponse> = try {
         ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_JSON)
@@ -69,6 +72,7 @@ class UserController(
         value = ["/{id}"],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
+    @PreAuthorize("hasRole(T(com.github.hu553in.dealmanagement.entities.UserRole).ROLE_ADMIN)")
     fun update(
         @PathVariable("id") id: String,
         @RequestBody updateUserRequest: UpdateUserRequest
