@@ -124,6 +124,34 @@ class DealController(
     }
 
     @PatchMapping(
+        value = ["/{id}"],
+        consumes = [MediaType.APPLICATION_JSON_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @PreAuthorize("hasRole(T(com.github.hu553in.dealmanagement.entities.UserRole).ROLE_ADMIN)")
+    fun update(
+        @PathVariable("id") id: String,
+        @RequestBody updateDealRequest: UpdateDealRequest
+    ): ResponseEntity<CommonResponse> = try {
+        val errors = updateDealRequestValidator.validate(updateDealRequest)
+        if (errors.isNotEmpty()) {
+            responseUtils.respondWithValidationErrors(errors)
+        } else {
+            dealService.update(id, updateDealRequest)
+            ResponseEntity.noContent().build()
+        }
+    } catch (t: Throwable) {
+        ResponseEntity.unprocessableEntity()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                CommonResponse(
+                    HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                    errors = listOf("Unable to update deal because of: ${t.message}")
+                )
+            )
+    }
+
+    @PatchMapping(
         value = ["/{id}/{action}"],
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
@@ -151,35 +179,7 @@ class DealController(
             .body(
                 CommonResponse(
                     HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                    errors = listOf("Unable to do deal action because of: ${t.message}")
-                )
-            )
-    }
-
-    @PatchMapping(
-        value = ["/{id}"],
-        consumes = [MediaType.APPLICATION_JSON_VALUE],
-        produces = [MediaType.APPLICATION_JSON_VALUE]
-    )
-    @PreAuthorize("hasRole(T(com.github.hu553in.dealmanagement.entities.UserRole).ROLE_ADMIN)")
-    fun update(
-        @PathVariable("id") id: String,
-        @RequestBody updateDealRequest: UpdateDealRequest
-    ): ResponseEntity<CommonResponse> = try {
-        val errors = updateDealRequestValidator.validate(updateDealRequest)
-        if (errors.isNotEmpty()) {
-            responseUtils.respondWithValidationErrors(errors)
-        } else {
-            dealService.update(id, updateDealRequest)
-            ResponseEntity.noContent().build()
-        }
-    } catch (t: Throwable) {
-        ResponseEntity.unprocessableEntity()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(
-                CommonResponse(
-                    HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                    errors = listOf("Unable to update deal because of: ${t.message}")
+                    errors = listOf("Unable to $action deal because of: ${t.message}")
                 )
             )
     }

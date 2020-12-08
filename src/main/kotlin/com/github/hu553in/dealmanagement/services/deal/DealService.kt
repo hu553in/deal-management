@@ -58,7 +58,7 @@ class DealService(private val dealRepository: IDealRepository) : IDealService {
         try {
             dealActions.getValue(action).invoke(id)
         } catch (t: Throwable) {
-            throw ServiceException("Unable to do deal action because of: ${t.message}", t)
+            throw ServiceException("Unable to $action deal because of: ${t.message}", t)
         }
     }
 

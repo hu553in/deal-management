@@ -53,7 +53,7 @@ class DealRepository(private val jdbcOperations: JdbcOperations) : IDealReposito
     @Throws(RepositoryException::class)
     override fun add(customerId: String, providerId: String, status: DealStatus, description: String): String {
         val id = UUID.randomUUID().toString()
-        val query = "insert into deal values (?, ?, ?, ?, ?)"
+        val query = "insert into deal values (?, ?, ?, ?::status_type, ?)"
         try {
             jdbcOperations.update(query, id, customerId, providerId, status.name, description)
         } catch (t: Throwable) {
@@ -85,7 +85,7 @@ class DealRepository(private val jdbcOperations: JdbcOperations) : IDealReposito
         val params = mutableListOf<Pair<String, String>>()
         customerId?.let { params.add(it to "customerId = ?") }
         providerId?.let { params.add(it to "providerId = ?") }
-        status?.let { params.add(it.name to "status = ?") }
+        status?.let { params.add(it.name to "status = ?::status_type") }
         description?.let { params.add(it to "description = ?") }
         if (params.isNotEmpty()) {
             val query = "update deal set ${params.joinToString(", ") { it.second }} where id = ?"
