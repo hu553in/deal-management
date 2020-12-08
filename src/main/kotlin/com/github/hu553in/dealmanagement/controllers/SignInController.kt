@@ -1,9 +1,10 @@
 package com.github.hu553in.dealmanagement.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.hu553in.dealmanagement.components.ResponseUtils
 import com.github.hu553in.dealmanagement.components.validators.SignInRequestValidator
 import com.github.hu553in.dealmanagement.models.CommonResponse
-import com.github.hu553in.dealmanagement.models.SignInRequest
+import com.github.hu553in.dealmanagement.models.requests.SignInRequest
 import com.github.hu553in.dealmanagement.services.jwt.IJwtService
 import com.github.hu553in.dealmanagement.services.signin.ISignInService
 import org.springframework.http.HttpStatus
@@ -21,7 +22,7 @@ class SignInController(
     private val jwtService: IJwtService,
     private val objectMapper: ObjectMapper,
     private val signInRequestValidator: SignInRequestValidator,
-    private val controllerUtils: ControllerUtils
+    private val responseUtils: ResponseUtils
 ) {
     @PostMapping(
         consumes = [MediaType.APPLICATION_JSON_VALUE],
@@ -30,7 +31,7 @@ class SignInController(
     fun signIn(@RequestBody signInRequest: SignInRequest): ResponseEntity<CommonResponse> = try {
         val errors = signInRequestValidator.validate(signInRequest)
         if (errors.isNotEmpty()) {
-            controllerUtils.respondWithValidationErrors(errors)
+            responseUtils.respondWithValidationErrors(errors)
         } else {
             val token = jwtService.createToken(signInService.signIn(signInRequest))
             ResponseEntity.ok()

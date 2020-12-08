@@ -20,6 +20,17 @@ class CommonsValidator {
         }
     }
 
+    fun isNotEmpty(
+        value: String,
+        errors: MutableMap<String, String>,
+        field: String,
+        key: String = "Should not be empty"
+    ) {
+        if (!errors.containsKey(field) && value.trim().isEmpty()) {
+            errors[field] = key
+        }
+    }
+
     fun hasLengthLessThan(
         value: String?,
         bound: Int,

@@ -1,4 +1,4 @@
-package com.github.hu553in.dealmanagement.controllers
+package com.github.hu553in.dealmanagement.components
 
 import com.github.hu553in.dealmanagement.models.CommonResponse
 import org.springframework.http.HttpStatus
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 
 @Component
-class ControllerUtils {
+class ResponseUtils {
     fun respondWithValidationErrors(errors: Map<String, String>): ResponseEntity<CommonResponse> =
         ResponseEntity.badRequest()
             .contentType(MediaType.APPLICATION_JSON)

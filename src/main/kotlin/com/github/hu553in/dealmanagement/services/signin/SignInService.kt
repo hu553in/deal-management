@@ -2,7 +2,7 @@ package com.github.hu553in.dealmanagement.services.signin
 
 import com.github.hu553in.dealmanagement.entities.User
 import com.github.hu553in.dealmanagement.exceptions.ServiceException
-import com.github.hu553in.dealmanagement.models.SignInRequest
+import com.github.hu553in.dealmanagement.models.requests.SignInRequest
 import com.github.hu553in.dealmanagement.repositories.user.IUserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service

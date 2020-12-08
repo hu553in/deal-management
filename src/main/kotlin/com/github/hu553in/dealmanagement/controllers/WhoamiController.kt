@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/whoami")
 class WhoamiController(private val whoamiService: IWhoamiService, private val objectMapper: ObjectMapper) {
-    @GetMapping
+    @GetMapping(
+        consumes = [MediaType.APPLICATION_JSON_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @PreAuthorize(
         """hasAnyRole(
             T(com.github.hu553in.dealmanagement.entities.UserRole).ROLE_VIEWER,

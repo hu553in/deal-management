@@ -1,14 +1,14 @@
 package com.github.hu553in.dealmanagement.components.validators
 
-import com.github.hu553in.dealmanagement.models.UpdateUserRequest
+import com.github.hu553in.dealmanagement.models.requests.UpdateUserRequest
 import org.springframework.stereotype.Component
 
 @Component
 class UpdateUserRequestValidator(
     private val commonsValidator: CommonsValidator,
-    private val roleValidator: RoleValidator
+    private val userRoleValidator: UserRoleValidator
 ) : Validator<UpdateUserRequest>() {
-    override fun validation(errors: MutableMap<String, String>, value: UpdateUserRequest) {
+    override fun validateInternal(errors: MutableMap<String, String>, value: UpdateUserRequest) {
         value.email?.let {
             commonsValidator.isEmail(it, errors, "email")
             commonsValidator.hasLengthLessThanOrEqualTo(it, 255, errors, "email")
@@ -17,6 +17,6 @@ class UpdateUserRequestValidator(
             commonsValidator.hasLengthGreaterThanOrEqualTo(it, 8, errors, "password")
             commonsValidator.hasLengthLessThanOrEqualTo(it, 255, errors, "password")
         }
-        value.role?.let { roleValidator.isRole(it, errors, "role") }
+        value.role?.let { userRoleValidator.isUserRole(it, errors, "role") }
     }
 }

@@ -1,8 +1,9 @@
 package com.github.hu553in.dealmanagement.controllers
 
+import com.github.hu553in.dealmanagement.components.ResponseUtils
 import com.github.hu553in.dealmanagement.components.validators.SignUpRequestValidator
 import com.github.hu553in.dealmanagement.models.CommonResponse
-import com.github.hu553in.dealmanagement.models.SignUpRequest
+import com.github.hu553in.dealmanagement.models.requests.SignUpRequest
 import com.github.hu553in.dealmanagement.services.signup.ISignUpService
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -17,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController
 class SignUpController(
     private val signUpService: ISignUpService,
     private val signUpRequestValidator: SignUpRequestValidator,
-    private val controllerUtils: ControllerUtils
+    private val responseUtils: ResponseUtils
 ) {
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun signUp(@RequestBody signUpRequest: SignUpRequest): ResponseEntity<CommonResponse> = try {
         val errors = signUpRequestValidator.validate(signUpRequest)
         if (errors.isNotEmpty()) {
-            controllerUtils.respondWithValidationErrors(errors)
+            responseUtils.respondWithValidationErrors(errors)
         } else {
             signUpService.signUp(signUpRequest)
             ResponseEntity.noContent().build()

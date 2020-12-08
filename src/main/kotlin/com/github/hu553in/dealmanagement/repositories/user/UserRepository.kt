@@ -87,9 +87,9 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
     @Throws(RepositoryException::class)
     override fun update(id: String, email: String?, password: String?, role: UserRole?) {
         val params = mutableListOf<Pair<String, String>>()
-        email?.let { params.add(email to "email = ?") }
-        password?.let { params.add(password to "password = ?") }
-        role?.let { params.add(role.name to "role = ?::role_type") }
+        email?.let { params.add(it to "email = ?") }
+        password?.let { params.add(it to "password = ?") }
+        role?.let { params.add(it.name to "role = ?::role_type") }
         if (params.isNotEmpty()) {
             val query = "update \"user\" set ${params.joinToString(", ") { it.second }} where id = ?"
             try {
@@ -100,6 +100,19 @@ class UserRepository(private val jdbcOperations: JdbcOperations) : IUserReposito
             } catch (t: Throwable) {
                 throw RepositoryException("Unable to update user because of: ${t.message}", t)
             }
+        }
+    }
+
+    @Throws(RepositoryException::class)
+    override fun delete(id: String) {
+        val query = "delete from \"user\" where id = ?"
+        try {
+            val updatedRowsCount = jdbcOperations.update(query, id)
+            if (updatedRowsCount != 1) {
+                error("There are zero or multiple users with passed ID")
+            }
+        } catch (t: Throwable) {
+            throw RepositoryException("Unable to delete user because of: ${t.message}", t)
         }
     }
 }

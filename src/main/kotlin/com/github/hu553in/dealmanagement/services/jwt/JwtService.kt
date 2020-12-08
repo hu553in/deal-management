@@ -21,9 +21,9 @@ class JwtService(private val jwtSettings: JwtSettings) : IJwtService {
         val claims = Jwts.claims()
             .setIssuer(jwtSettings.issuer)
             .setIssuedAt(Date.from(currentInstant))
-            .setSubject(user.id)
+            .setSubject(user.email)
             .setExpiration(Date.from(currentInstant.plus(jwtSettings.ttl)))
-        claims["details"] = user.email
+        claims["id"] = user.id
         claims["role"] = user.role
         return try {
             val key = Keys.hmacShaKeyFor(jwtSettings.secret)
@@ -43,11 +43,11 @@ class JwtService(private val jwtSettings: JwtSettings) : IJwtService {
             .requireIssuer(jwtSettings.issuer)
             .build()
             .parseClaimsJws(token)
-        val id = claims.body.subject
-        val email = claims.body.get("details", String::class.java)
+        val email = claims.body.subject
+        val id = claims.body.get("id", String::class.java)
         return try {
             val role = UserRole.valueOf(claims.body.get("role", String::class.java))
-            AuthenticatedJwt(id, email, listOf(role))
+            AuthenticatedJwt(email, id, listOf(role))
         } catch (t: Throwable) {
             throw ServiceException("Unable to parse token because of: ${t.message}", t)
         }

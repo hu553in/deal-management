@@ -1,4 +1,4 @@
-package com.github.hu553in.dealmanagement.models
+package com.github.hu553in.dealmanagement.models.requests
 
 import com.fasterxml.jackson.annotation.JsonCreator
 

@@ -22,4 +22,7 @@ interface IUserRepository {
 
     @Throws(RepositoryException::class)
     fun update(id: String, email: String?, password: String?, role: UserRole?)
+
+    @Throws(RepositoryException::class)
+    fun delete(id: String)
 }

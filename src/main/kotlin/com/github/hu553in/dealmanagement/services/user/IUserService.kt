@@ -2,7 +2,7 @@ package com.github.hu553in.dealmanagement.services.user
 
 import com.github.hu553in.dealmanagement.entities.User
 import com.github.hu553in.dealmanagement.exceptions.ServiceException
-import com.github.hu553in.dealmanagement.models.UpdateUserRequest
+import com.github.hu553in.dealmanagement.models.requests.UpdateUserRequest
 
 interface IUserService {
     @Throws(ServiceException::class)
@@ -13,4 +13,7 @@ interface IUserService {
 
     @Throws(ServiceException::class)
     fun update(id: String, updateUserRequest: UpdateUserRequest)
+
+    @Throws(ServiceException::class)
+    fun delete(id: String)
 }
