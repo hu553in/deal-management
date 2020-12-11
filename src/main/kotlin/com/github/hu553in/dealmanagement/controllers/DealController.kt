@@ -3,8 +3,9 @@ package com.github.hu553in.dealmanagement.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.hu553in.dealmanagement.components.ResponseUtils
 import com.github.hu553in.dealmanagement.components.validators.AddDealRequestValidator
-import com.github.hu553in.dealmanagement.components.validators.DealActionValidator
+import com.github.hu553in.dealmanagement.components.validators.DealStatusValidator
 import com.github.hu553in.dealmanagement.components.validators.UpdateDealRequestValidator
+import com.github.hu553in.dealmanagement.entities.DealStatus
 import com.github.hu553in.dealmanagement.models.CommonResponse
 import com.github.hu553in.dealmanagement.models.requests.AddDealRequest
 import com.github.hu553in.dealmanagement.models.requests.UpdateDealRequest
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -29,7 +31,7 @@ class DealController(
     private val objectMapper: ObjectMapper,
     private val addDealRequestValidator: AddDealRequestValidator,
     private val updateDealRequestValidator: UpdateDealRequestValidator,
-    private val dealActionValidator: DealActionValidator,
+    private val dealStatusValidator: DealStatusValidator,
     private val responseUtils: ResponseUtils
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -152,7 +154,7 @@ class DealController(
     }
 
     @PatchMapping(
-        value = ["/{id}/{action}"],
+        value = ["/change-status/{id}"],
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
@@ -162,15 +164,17 @@ class DealController(
             T(com.github.hu553in.dealmanagement.entities.UserRole).ROLE_ADMIN
         )"""
     )
-    fun doAction(
+    fun changeStatus(
         @PathVariable("id") id: String,
-        @PathVariable("action") action: String
+        @RequestParam("status") status: String
     ): ResponseEntity<CommonResponse> = try {
-        val errors = dealActionValidator.validate(action)
+        val errors = mutableMapOf<String, String>().apply {
+            dealStatusValidator.isDealStatus(status, this, "status")
+        }
         if (errors.isNotEmpty()) {
             responseUtils.respondWithValidationErrors(errors)
         } else {
-            dealService.doAction(id, action)
+            dealService.changeStatus(id, DealStatus.valueOf(status))
             ResponseEntity.noContent().build()
         }
     } catch (t: Throwable) {
@@ -179,7 +183,7 @@ class DealController(
             .body(
                 CommonResponse(
                     HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                    errors = listOf("Unable to $action deal because of: ${t.message}")
+                    errors = listOf("Unable to change deal status because of: ${t.message}")
                 )
             )
     }

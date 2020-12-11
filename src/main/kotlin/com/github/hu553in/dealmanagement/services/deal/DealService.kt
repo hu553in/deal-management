@@ -54,11 +54,11 @@ class DealService(private val dealRepository: IDealRepository) : IDealService {
     }
 
     @Throws(ServiceException::class)
-    override fun doAction(id: String, action: String) {
+    override fun changeStatus(id: String, status: DealStatus) {
         try {
-            dealActions.getValue(action).invoke(id)
+            update(id, UpdateDealRequest(status = status.name))
         } catch (t: Throwable) {
-            throw ServiceException("Unable to $action deal because of: ${t.message}", t)
+            throw ServiceException("Unable to change deal status because of: ${t.message}", t)
         }
     }
 

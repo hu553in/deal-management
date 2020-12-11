@@ -15,11 +15,11 @@ data class User(
     constructor(id: String, email: String, role: UserRole) : this(id, email, null, role)
 
     constructor(auth: Authentication) : this(
-        auth.details as String,
+        auth.details.toString(),
         if (auth.principal.javaClass == UserDetails::class.java)
-            (auth.principal as UserDetails).username as String
+            (auth.principal as UserDetails).username.toString()
         else
-            auth.principal as String,
+            auth.principal.toString(),
         null,
         UserRole.valueOf(auth.authorities.singleOrNull()?.authority ?: error("User has zero or multiple roles"))
     )
