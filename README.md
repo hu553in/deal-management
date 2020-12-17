@@ -24,7 +24,4 @@ You should open this file using the awesome [diagrams.net](https://app.diagrams.
 2. Create a relative symlink to [the GUI](https://github.com/hu553in/deal-management-gui)
 named `./gui` (e.g. `ln -rs ../deal-management-gui ./gui`)
 3. Run `make` to run the app
-4. Run `make testBackend` in the another terminal window in case if you want to run backend unit tests
-5. Run `make testFrontend` in the another terminal window in case if you want to run UI tests with a mock API
-6. Run `make testEndToEnd` in the another terminal window in case if you want to run integration (end-to-end)
-tests with a real API
+4. Run `make test` in the another terminal window in case if you want to run backend unit tests

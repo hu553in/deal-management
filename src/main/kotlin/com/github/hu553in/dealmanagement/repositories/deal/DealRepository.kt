@@ -65,7 +65,7 @@ class DealRepository(private val jdbcOperations: JdbcOperations) : IDealReposito
     @Throws(RepositoryException::class)
     override fun add(customerId: String, providerId: String, description: String): String {
         val id = UUID.randomUUID().toString()
-        val query = "insert into deal values (?, ?, ?, ?)"
+        val query = "insert into deal (id, customer_id, provider_id, description) values (?, ?, ?, ?)"
         try {
             jdbcOperations.update(query, id, customerId, providerId, description)
         } catch (t: Throwable) {

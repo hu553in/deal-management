@@ -47,7 +47,6 @@ services:
     depends_on:
       - api
     volumes:
-      - ./docker/http-reverse-proxy:/opt/http-reverse-proxy:ro
       - ./gui:/opt/deal_management
     environment:
       REACT_APP_API_URL: http://localhost:9920
