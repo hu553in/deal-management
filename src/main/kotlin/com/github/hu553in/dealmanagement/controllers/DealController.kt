@@ -155,7 +155,6 @@ class DealController(
 
     @PatchMapping(
         value = ["/change-status/{id}"],
-        consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @PreAuthorize(

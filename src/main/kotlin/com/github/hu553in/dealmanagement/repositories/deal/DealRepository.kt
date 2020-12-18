@@ -83,8 +83,8 @@ class DealRepository(private val jdbcOperations: JdbcOperations) : IDealReposito
         description: String?
     ) {
         val params = mutableListOf<Pair<String, String>>()
-        customerId?.let { params.add(it to "customerId = ?") }
-        providerId?.let { params.add(it to "providerId = ?") }
+        customerId?.let { params.add(it to "customer_id = ?") }
+        providerId?.let { params.add(it to "provider_id = ?") }
         status?.let { params.add(it.name to "status = ?::status_type") }
         description?.let { params.add(it to "description = ?") }
         if (params.isNotEmpty()) {
